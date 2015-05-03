@@ -33,12 +33,13 @@ function love.load()
 	--
 	love.graphics.setBackgroundColor(0,0,0)
 	--
-	content.fonts["normal"] = love.graphics.newFont("data/fonts/OpenSans-Semibold.ttf",24)
+	content.fonts["normal"]	= love.graphics.newFont("data/fonts/OpenSans-Semibold.ttf",24)
+	content.fonts["small"]	= love.graphics.newFont("data/fonts/OpenSans-Semibold.ttf",16)
 	love.graphics.setFont(content.fonts["normal"])
 	--
 	Gamestate.registerEvents()
 	
-	local initState = require("states/game")
+	local initState = require("states/game2")
 	Gamestate.switch(initState)
 end
 
@@ -68,6 +69,7 @@ function love.update(dt)
 end
 
 function love.draw()
+	love.graphics.setFont( content.fonts["small"] )
 	love.graphics.print( love.timer.getFPS(), SCREEN_LEFT, SCREEN_TOP )
 end
 

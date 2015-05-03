@@ -1,13 +1,15 @@
 gamestate	= require "lib.hump.gamestate"
 bump		= require "lib.bump.bump"
+sti			= require "lib.sti"
 
 local state = {}
 
 function state:enter(state)
 	love.graphics.setBackgroundColor(16,16,16)
 	self.uptime = 0
-	
-	self.world = bump.newWorld(50)
+
+	self.map = sti.new("data/maps/00")
+	self.world = bump.newWorld()
 	self.ground = { name = "Ground", x = 0, y = SCREEN_BOTTOM-240, 
 					w = SCREEN_WIDTH, h = 240 }
 	self.player = { name = "Player", x = SCREEN_CENTER_X, y = SCREEN_CENTER_Y - 80,
@@ -32,7 +34,8 @@ end
 function state:update(dt)
 	self.uptime = self.uptime + dt
 	self.dt = dt
-			
+	self.map:update(dt)
+
 	if self.player.grounded then
 		if love.keyboard.isDown("up") then self.player.velocity.y = -500 self.player.grounded = false end
 	end
@@ -63,11 +66,12 @@ function state:update(dt)
 end
 
 function state:draw()
+	self.map:draw()
 	love.graphics.setColor(255,255,self.player.grounded and 0 or 255)
 	love.graphics.rectangle( "fill", self.player.x, self.player.y, self.player.w, self.player.h ) 
 	
 	love.graphics.setColor(255,255,255) 
-	love.graphics.rectangle( "fill", self.ground.x, self.ground.y, self.ground.w, self.ground.h )
+
 	love.graphics.print(string.format("%02.2f",self.uptime), SCREEN_RIGHT - 128, SCREEN_TOP + 16)
 	love.graphics.print(string.format("%02.2f %02.2f", self.player.velocity.x, self.player.velocity.y), SCREEN_RIGHT - 128, SCREEN_TOP + 32)
 end
