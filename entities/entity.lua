@@ -4,18 +4,16 @@ Class	= require "lib.hump.class"
 
 Entity = Class {
 	init = function(self, world, x, y, w, h)
+		self.type = "entity"
 		self.world = world
 		self.position = { x = x, y = y }
 		self.velocity = { x = 0, y = 0 }
 		self.size = { w = w, h = h }
 		-- Install to world
-		self:addToWorld()
+		self.addToWorld(self)
 	end,
-	--
 	addToWorld = function(self)
-		self.world:add(self,
-			self.position.x, self.position.y,
-			self.size.w, self.size.h)
+		return nil
 	end,
 	--
 	getPosition = function(self)
@@ -33,6 +31,7 @@ Entity = Class {
 	draw = function(self) end,
 	--
 	destroy = function(self)
+		self.isDestroyed = true
 		self.world:remove(self)
 	end
 }

@@ -7,13 +7,22 @@ Player = Class {
 	__includes = Entity, 
 	init = function(self, world, x, y)
 		Entity.init(self, world, x, y, 32, 64)
-		self.accel = 12
-		self.decel = 7
+		self.type = "player"
+		--self:addToWorld()
+		self.accel = 18
+		self.decel = 11
 		self.brakePower = 1.5
 		self.maxSpeed = 300
 		self.grounded = false
+		--
+		self.health = 5
 	end,
 	--
+	addToWorld = function(self)
+		self.world:add(self,
+			self.position.x, self.position.y,
+			self.size.w, self.size.h)
+	end,
 	addGravity = function(self, dt)
 		self.velocity.y = self.velocity.y + GRAVITY
 	end,
@@ -61,8 +70,15 @@ Player = Class {
 
 		for i=1,len do
 			local col = cols[i]
-			self:checkOnGround(col.normal.y)
-			self:checkSides(col.normal.x)
+
+			if col.other.type == "enemy" then
+				self.velocity.x = self.velocity.x * -1 
+				self.velocity.x = -160 
+				col.other:removeHealth(1)
+			else
+				self:checkOnGround(col.normal.y)
+				self:checkSides(col.normal.x)
+			end
 		end
 
 		self.position.x = nextX

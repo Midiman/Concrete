@@ -3,11 +3,12 @@ Class	= require "lib.hump.class"
 Entity	= require "entities.entity"
 --
 
-Block = Class {
+Enemy = Class {
 	__includes = Entity,
-	init = function(self, world, x, y, w, h)
-		Entity.init(self, world, x, y, w, h)
-		self.type = "solid"
+	init = function(self, world, x, y)
+		Entity.init(self, world, x, y, 32, 32)
+		self.type = "enemy"
+		self.health = 2
 	end,
 	--
 	addToWorld = function(self)
@@ -15,27 +16,31 @@ Block = Class {
 			self.position.x, self.position.y,
 			self.size.w, self.size.h)
 	end,
-	--
-	update = function(self, dt)
-		return dt
+	removeHealth = function(self, strength)
+		self.health = self.health - strength
+
+		if self.health <= 0 then
+			self:destroy(self)
+		end
 	end,
-	draw = function(self)
+	--
+	update = function(self) end,
+	draw = function(self) 
 		local r,g,b,a = love.graphics.getColor()
-		love.graphics.setColor(255,255,0,127)
+		love.graphics.setColor(255,0,0,127)
 		love.graphics.rectangle('fill',
 			self.position.x, self.position.y,
 			self.size.w, self.size.h)
-		love.graphics.setColor(255,255,255)
+		love.graphics.setColor(255,0,0)
 		love.graphics.rectangle('line',
 			self.position.x, self.position.y,
 			self.size.w, self.size.h)
 		love.graphics.setColor(r,g,b,a)
 	end,
 	--
-	destroy = function(self)
-		return nil
-	end
 }
+
+
 --
 
-return Block
+return Enemy
