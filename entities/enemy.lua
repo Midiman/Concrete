@@ -35,6 +35,8 @@ Enemy = Class {
 		love.graphics.rectangle('line',
 			self.position.x, self.position.y,
 			self.size.w, self.size.h)
+		love.graphics.setColor(255,255,255)
+		love.graphics.printf( self.health, self.position.x, self.position.y, self.size.w, "center" )
 		love.graphics.setColor(r,g,b,a)
 	end,
 	--

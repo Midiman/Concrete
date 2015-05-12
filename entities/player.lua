@@ -112,7 +112,9 @@ Player = Class {
 				self.position.x, self.position.y + self.size.h -4,
 				self.size.w, 4)
 		end
-
+		
+		love.graphics.setColor(255,255,255)
+		love.graphics.printf( self.health, self.position.x, self.position.y + self.size.h/4, self.size.w, "center" )
 		love.graphics.setColor(r,b,g,a)
 	end,
 	--
