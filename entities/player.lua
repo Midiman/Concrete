@@ -13,6 +13,7 @@ Player = Class {
 		self.decel = 11
 		self.brakePower = 1.5
 		self.maxSpeed = 300
+		self.direction = 1
 		self.grounded = false
 		--
 		self.health = 5
@@ -72,9 +73,9 @@ Player = Class {
 			local col = cols[i]
 
 			if col.other.type == "enemy" then
-				self.velocity.x = self.velocity.x * -1 
-				self.velocity.x = -160 
-				col.other:removeHealth(1)
+				self.velocity.x = -320 * self.direction
+				self.velocity.y = -320 
+				self:getHurt(1)
 			else
 				self:checkOnGround(col.normal.y)
 				self:checkSides(col.normal.x)
@@ -83,6 +84,8 @@ Player = Class {
 
 		self.position.x = nextX
 		self.position.y = nextY
+		
+		self.direction = self.velocity.x >= 0 and 1 or -1
 	end,
 	checkSides = function(self, normalX)
 		if normalX ~= 0 then self.velocity.x = 0 end
@@ -116,6 +119,10 @@ Player = Class {
 		love.graphics.setColor(255,255,255)
 		love.graphics.printf( self.health, self.position.x, self.position.y + self.size.h/4, self.size.w, "center" )
 		love.graphics.setColor(r,b,g,a)
+	end,
+	--
+	getHurt = function(self, damage)
+		self.health = self.health - damage
 	end,
 	--
 	destroy = function(self)
